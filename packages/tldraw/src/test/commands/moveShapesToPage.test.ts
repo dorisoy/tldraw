@@ -51,6 +51,27 @@ describe('Editor.moveShapesToPage', () => {
 		expect([...editor.getCurrentPageShapeIds()]).toEqual([ids.box1])
 	})
 
+	it('Moves shapes to page but stays on the page', () => {
+		expect(editor.getCurrentPageId()).toBe(ids.page1)
+		editor.moveShapesToPage([ids.box2, ids.ellipse1], ids.page2, { changePage: false })
+		// we staye on the same page
+		expect(editor.getCurrentPageId()).toBe(ids.page1)
+
+		expect(editor.getShape(ids.box2)!.parentId).toBe(ids.page2)
+		expect(editor.getShape(ids.ellipse1)!.parentId).toBe(ids.page2)
+
+		// box1 didn't get moved, still on page 1
+		expect(editor.getShape(ids.box1)!.parentId).toBe(ids.page1)
+
+		expect([...editor.getCurrentPageShapeIds()].sort()).toMatchObject([ids.box1])
+
+		expect(editor.getCurrentPageId()).toBe(ids.page1)
+
+		editor.setCurrentPage(ids.page2)
+
+		expect([...editor.getCurrentPageShapeIds()]).toEqual([ids.box2, ids.ellipse1])
+	})
+
 	it('Moves children to page', () => {
 		editor.moveShapesToPage([ids.box1], ids.page2)
 		expect(editor.getShape(ids.box2)!.parentId).toBe(ids.box1)

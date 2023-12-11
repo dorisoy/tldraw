@@ -2431,10 +2431,7 @@ export class Editor extends EventEmitter<TLEventMap> {
 	 * @example
 	 * ```ts
 	 * editor.zoomToContent()
-	 * editor.zoomToContent({ duration: 200 })
 	 * ```
-	 *
-	 * @param opts - The options for an animation.
 	 *
 	 * @public
 	 */
@@ -5744,14 +5741,21 @@ export class Editor extends EventEmitter<TLEventMap> {
 	 * @example
 	 * ```ts
 	 * editor.moveShapesToPage(['box1', 'box2'], 'page1')
+	 * editor.moveShapesToPage(['box1', 'box2'], 'page1', {changePage: false})
 	 * ```
 	 *
 	 * @param shapes - The shapes (or shape ids) of the shapes to move.
 	 * @param pageId - The id of the page where the shapes will be moved.
+	 * @param opts - Options for the move. Passing `changePage` as `false` will stay on the current page.
 	 *
 	 * @public
 	 */
-	moveShapesToPage(shapes: TLShapeId[] | TLShape[], pageId: TLPageId): this {
+	moveShapesToPage(
+		shapes: TLShapeId[] | TLShape[],
+		pageId: TLPageId,
+		opts = {} as { changePage: boolean }
+	): this {
+		const { changePage = true } = opts
 		const ids =
 			typeof shapes[0] === 'string'
 				? (shapes as TLShapeId[])
@@ -5803,6 +5807,10 @@ export class Editor extends EventEmitter<TLEventMap> {
 			// pasted shapes
 			this.setCamera({ ...this.getCamera(), z: fromPageZ })
 			this.centerOnPoint(this.getSelectionRotatedPageBounds()!.center)
+			// Select the original page
+			if (!changePage) {
+				this.setCurrentPage(currentPageId)
+			}
 		})
 
 		return this

@@ -15396,7 +15396,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@tldraw/editor!Editor#moveShapesToPage:member(1)",
-              "docComment": "/**\n * Move shapes to page.\n *\n * @param shapes - The shapes (or shape ids) of the shapes to move.\n *\n * @param pageId - The id of the page where the shapes will be moved.\n *\n * @example\n * ```ts\n * editor.moveShapesToPage(['box1', 'box2'], 'page1')\n * ```\n *\n * @public\n */\n",
+              "docComment": "/**\n * Move shapes to page.\n *\n * @param shapes - The shapes (or shape ids) of the shapes to move.\n *\n * @param pageId - The id of the page where the shapes will be moved.\n *\n * @param opts - Options for the move. Passing `changePage` as `false` will stay on the current page.\n *\n * @example\n * ```ts\n * editor.moveShapesToPage(['box1', 'box2'], 'page1')\n * editor.moveShapesToPage(['box1', 'box2'], 'page1', {changePage: false})\n * ```\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",
@@ -15431,6 +15431,14 @@
                 },
                 {
                   "kind": "Content",
+                  "text": ", opts?: "
+                },
+                {
+                  "kind": "Content",
+                  "text": "{\n        changePage: boolean;\n    }"
+                },
+                {
+                  "kind": "Content",
                   "text": "): "
                 },
                 {
@@ -15444,8 +15452,8 @@
               ],
               "isStatic": false,
               "returnTypeTokenRange": {
-                "startIndex": 8,
-                "endIndex": 9
+                "startIndex": 10,
+                "endIndex": 11
               },
               "releaseTag": "Public",
               "isProtected": false,
@@ -15466,6 +15474,14 @@
                     "endIndex": 7
                   },
                   "isOptional": false
+                },
+                {
+                  "parameterName": "opts",
+                  "parameterTypeTokenRange": {
+                    "startIndex": 8,
+                    "endIndex": 9
+                  },
+                  "isOptional": true
                 }
               ],
               "isOptional": false,
@@ -20472,7 +20488,7 @@
             {
               "kind": "Method",
               "canonicalReference": "@tldraw/editor!Editor#zoomToContent:member(1)",
-              "docComment": "/**\n * Move the camera to the nearest content.\n *\n * @param opts - The options for an animation.\n *\n * @example\n * ```ts\n * editor.zoomToContent()\n * editor.zoomToContent({ duration: 200 })\n * ```\n *\n * @public\n */\n",
+              "docComment": "/**\n * Move the camera to the nearest content.\n *\n * @example\n * ```ts\n * editor.zoomToContent()\n * ```\n *\n * @public\n */\n",
               "excerptTokens": [
                 {
                   "kind": "Content",

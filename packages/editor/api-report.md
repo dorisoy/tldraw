@@ -854,7 +854,9 @@ export class Editor extends EventEmitter<TLEventMap> {
     // (undocumented)
     isShapeOrAncestorLocked(id?: TLShapeId): boolean;
     mark(markId?: string, onUndo?: boolean, onRedo?: boolean): this;
-    moveShapesToPage(shapes: TLShape[] | TLShapeId[], pageId: TLPageId): this;
+    moveShapesToPage(shapes: TLShape[] | TLShapeId[], pageId: TLPageId, opts?: {
+        changePage: boolean;
+    }): this;
     nudgeShapes(shapes: TLShape[] | TLShapeId[], offset: VecLike, historyOptions?: TLCommandHistoryOptions): this;
     // @deprecated (undocumented)
     get onlySelectedShape(): null | TLShape;
