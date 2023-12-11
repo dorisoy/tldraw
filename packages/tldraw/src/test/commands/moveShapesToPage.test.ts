@@ -54,7 +54,7 @@ describe('Editor.moveShapesToPage', () => {
 	it('Moves shapes to page but stays on the page', () => {
 		expect(editor.getCurrentPageId()).toBe(ids.page1)
 		editor.moveShapesToPage([ids.box2, ids.ellipse1], ids.page2, { changePage: false })
-		// we staye on the same page
+		// we stayed on the same page
 		expect(editor.getCurrentPageId()).toBe(ids.page1)
 
 		expect(editor.getShape(ids.box2)!.parentId).toBe(ids.page2)
