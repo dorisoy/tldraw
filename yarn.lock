@@ -7022,8 +7022,6 @@ __metadata:
     lazyrepo: "npm:0.0.0-alpha.27"
     nanoid: "npm:4.0.2"
     picocolors: "npm:^1.0.0"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
     strip-ansi: "npm:^7.1.0"
     toucan-js: "npm:^2.7.0"
     typescript: "npm:^5.2.2"
@@ -7155,6 +7153,8 @@ __metadata:
     "@types/react": "npm:^18.2.47"
     "@types/react-test-renderer": "npm:^18.0.0"
     lodash: "npm:^4.17.21"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
     react-test-renderer: "npm:^18.2.0"
   peerDependencies:
     react: ^18
@@ -7173,8 +7173,6 @@ __metadata:
     lodash.isequal: "npm:^4.5.0"
     nanoid: "npm:4.0.2"
     raf: "npm:^3.4.1"
-  peerDependencies:
-    react: ^18
   languageName: unknown
   linkType: soft
 
@@ -7205,10 +7203,9 @@ __metadata:
     jest-environment-jsdom: "npm:^29.4.3"
     lazyrepo: "npm:0.0.0-alpha.27"
     lz-string: "npm:^1.4.4"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
     resize-observer-polyfill: "npm:^1.5.1"
-  peerDependencies:
-    react: ^18
-    react-dom: ^18
   languageName: unknown
   linkType: soft
 
@@ -7223,8 +7220,6 @@ __metadata:
     kleur: "npm:^4.1.5"
     lazyrepo: "npm:0.0.0-alpha.27"
     nanoid: "npm:4.0.2"
-  peerDependencies:
-    react: ^18
   languageName: unknown
   linkType: soft
 
@@ -7244,9 +7239,6 @@ __metadata:
     uuid-by-string: "npm:^4.0.0"
     uuid-readable: "npm:^0.0.2"
     ws: "npm:^8.16.0"
-  peerDependencies:
-    react: ^18
-    react-dom: ^18
   languageName: unknown
   linkType: soft
 
