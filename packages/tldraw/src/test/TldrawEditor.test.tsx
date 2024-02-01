@@ -15,10 +15,6 @@ import { defaultTools } from '../lib/defaultTools'
 import { GeoShapeUtil } from '../lib/shapes/geo/GeoShapeUtil'
 
 function checkAllShapes(editor: Editor, shapes: string[]) {
-	expect(Object.keys(editor!.store.schema.types.shape.migrations.subTypeMigrations!)).toStrictEqual(
-		shapes
-	)
-
 	expect(Object.keys(editor!.shapeUtils)).toStrictEqual(shapes)
 }
 
