@@ -21,6 +21,7 @@ import { HTMLProps } from 'react';
 import { JsonObject } from '@tldraw/utils';
 import { JSX as JSX_2 } from 'react/jsx-runtime';
 import { MemoExoticComponent } from 'react';
+import { MigrationOptions } from '@tldraw/store';
 import { Migrations } from '@tldraw/store';
 import { NamedExoticComponent } from 'react';
 import { PointerEventHandler } from 'react';
@@ -1148,6 +1149,8 @@ export class Group2d extends Geometry2d {
 // @public (undocumented)
 export class GroupShapeUtil extends ShapeUtil<TLGroupShape> {
     // (undocumented)
+    static __legacyMigrations_do_not_update: Migrations;
+    // (undocumented)
     canBind: () => boolean;
     // (undocumented)
     component(shape: TLGroupShape): JSX_2.Element | null;
@@ -1159,8 +1162,6 @@ export class GroupShapeUtil extends ShapeUtil<TLGroupShape> {
     hideSelectionBoundsFg: () => boolean;
     // (undocumented)
     indicator(shape: TLGroupShape): JSX_2.Element;
-    // (undocumented)
-    static migrations: Migrations;
     // (undocumented)
     onChildrenChange: TLOnChildrenChangeHandler<TLGroupShape>;
     // (undocumented)
@@ -1619,6 +1620,7 @@ export const ShapeIndicator: React_3.NamedExoticComponent<{
 // @public (undocumented)
 export abstract class ShapeUtil<Shape extends TLUnknownShape = TLUnknownShape> {
     constructor(editor: Editor);
+    static __legacyMigrations_do_not_update: Migrations;
     // @internal
     backgroundComponent?(shape: Shape): any;
     canBind: <K>(_shape: Shape, _otherShape?: K | undefined) => boolean;
@@ -1647,8 +1649,8 @@ export abstract class ShapeUtil<Shape extends TLUnknownShape = TLUnknownShape> {
     hideSelectionBoundsFg: TLShapeUtilFlag<Shape>;
     abstract indicator(shape: Shape): any;
     isAspectRatioLocked: TLShapeUtilFlag<Shape>;
-    // (undocumented)
-    static migrations?: Migrations;
+    // @deprecated (undocumented)
+    static migrations?: any;
     onBeforeCreate?: TLOnBeforeCreateHandler<Shape>;
     onBeforeUpdate?: TLOnBeforeUpdateHandler<Shape>;
     // @internal
@@ -2102,6 +2104,7 @@ export interface TldrawEditorBaseProps {
     components?: TLEditorComponents;
     inferDarkMode?: boolean;
     initialState?: string;
+    migrations?: MigrationOptions;
     onMount?: TLOnMountHandler;
     shapeUtils?: readonly TLAnyShapeUtilConstructor[];
     tools?: readonly TLStateNodeConstructor[];
@@ -2574,10 +2577,11 @@ export interface TLShapeUtilCanvasSvgDef {
 
 // @public (undocumented)
 export interface TLShapeUtilConstructor<T extends TLUnknownShape, U extends ShapeUtil<T> = ShapeUtil<T>> {
+    __legacyMigrations_do_not_update: Migrations;
     // (undocumented)
     new (editor: Editor): U;
-    // (undocumented)
-    migrations?: Migrations;
+    // @deprecated (undocumented)
+    migrations?: any;
     // (undocumented)
     props?: ShapeProps<T>;
     // (undocumented)
@@ -2620,6 +2624,7 @@ export type TLStoreOptions = {
     schema?: StoreSchema<TLRecord, TLStoreProps>;
 } | {
     shapeUtils?: readonly TLAnyShapeUtilConstructor[];
+    migrations?: MigrationOptions;
 });
 
 // @public (undocumented)
