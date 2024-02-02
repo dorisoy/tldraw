@@ -666,7 +666,7 @@ export class Editor extends EventEmitter<TLEventMap> {
     getCanRedo(): boolean;
     getCanUndo(): boolean;
     getContainer: () => HTMLElement;
-    getContentFromCurrentPage(shapes: TLShape[] | TLShapeId[]): TLContent | undefined;
+    getContentFromCurrentPage(shapes: TLShape[] | TLShapeId[]): TLContentV1 | undefined;
     // @internal
     getCrashingError(): unknown;
     getCroppingShapeId(): null | TLShapeId;
@@ -819,7 +819,7 @@ export class Editor extends EventEmitter<TLEventMap> {
     pan(offset: VecLike, animation?: TLAnimationOptions): this;
     panZoomIntoView(ids: TLShapeId[], animation?: TLAnimationOptions): this;
     popFocusedGroupId(): this;
-    putContentOntoCurrentPage(content: TLContent, options?: {
+    putContentOntoCurrentPage(_content: TLContent, options?: {
         point?: VecLike;
         select?: boolean;
         preservePosition?: boolean;
@@ -2072,7 +2072,10 @@ export type TLCompleteEventInfo = {
 };
 
 // @public (undocumented)
-export interface TLContent {
+export type TLContent = TLContentV0 | TLContentV1;
+
+// @public @deprecated (undocumented)
+export interface TLContentV0 {
     // (undocumented)
     assets: TLAsset[];
     // (undocumented)
@@ -2081,6 +2084,19 @@ export interface TLContent {
     schema: SerializedSchema;
     // (undocumented)
     shapes: TLShape[];
+}
+
+// @public (undocumented)
+export interface TLContentV1 {
+    // (undocumented)
+    rootShapeIds: TLShapeId[];
+    // (undocumented)
+    snapshot: {
+        schema: SerializedSchema;
+        store: SerializedStore<TLRecord>;
+    };
+    // (undocumented)
+    version: 1;
 }
 
 // @public (undocumented)
