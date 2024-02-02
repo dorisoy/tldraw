@@ -6,8 +6,7 @@ import {
 	SerializedSchema,
 	StoreSchema,
 	UnknownRecord,
-	compareRecordVersions,
-	getRecordVersion,
+	compareSchemas,
 } from '@tldraw/store'
 import { DocumentRecordType, PageRecordType, TLDOCUMENT_ID } from '@tldraw/tlschema'
 import {
@@ -630,7 +629,11 @@ export class TLSyncRoom<R extends UnknownRecord> {
 		// We should disconnect the client and ask them to refresh.
 		const migrations = this.schema.getMigrationsSince(message.schema)
 		if (!migrations.ok || !migrations.value.every((m) => m.down && m.scope === 'record')) {
-			this.rejectSession(session, TLIncompatibilityReason.ClientTooOld)
+			if (compareSchemas(message.schema, this.serializedSchema) === -1) {
+				this.rejectSession(session, TLIncompatibilityReason.ClientTooOld)
+			} else {
+				this.rejectSession(session, TLIncompatibilityReason.ServerTooOld)
+			}
 			return
 		}
 
@@ -802,18 +805,29 @@ export class TLSyncRoom<R extends UnknownRecord> {
 				// if it was already deleted, there's no need to apply the patch
 				const doc = this.getDocument(id)
 				if (!doc) return Result.ok(undefined)
-				const theirVersion = getRecordVersion(doc.state, session.serializedSchema)
-				const ourVersion = getRecordVersion(doc.state, this.serializedSchema)
-				if (compareRecordVersions(ourVersion, theirVersion) === 1) {
-					// if the client's version of the record is older than ours, we apply the patch to the downgraded version of the record
-					const downgraded = this.schema.migratePersistedRecord(
-						doc.state,
-						session.serializedSchema,
-						'down'
+				const downgraded = this.schema.migratePersistedRecord(
+					doc.state,
+					session.serializedSchema,
+					'down'
+				)
+
+				if (downgraded.type === 'error') {
+					return fail(
+						downgraded.reason === MigrationFailureReason.TargetVersionTooNew
+							? TLIncompatibilityReason.ServerTooOld
+							: TLIncompatibilityReason.ClientTooOld
 					)
-					if (downgraded.type === 'error') {
-						return fail(TLIncompatibilityReason.ClientTooOld)
+				}
+
+				if (downgraded.value === doc.state) {
+					// value did not change so we can use mergeDiff
+					const diff = doc.mergeDiff(patch, this.clock)
+					if (!diff.ok) {
+						return fail(TLIncompatibilityReason.InvalidRecord)
 					}
+					if (diff.value) propagateOp(id, [RecordOpType.Patch, diff.value])
+				} else {
+					// the value changed so we need to apply the patch to the downgraded version of the record and then upgrade it again
 					const patched = applyObjectDiff(downgraded.value, patch)
 					// then upgrade the patched version and use that as the new state
 					const upgraded = this.schema.migratePersistedRecord(
@@ -825,16 +839,6 @@ export class TLSyncRoom<R extends UnknownRecord> {
 						return fail(TLIncompatibilityReason.ClientTooOld)
 					}
 					const diff = doc.replaceState(upgraded.value, this.clock)
-					if (!diff.ok) {
-						return fail(TLIncompatibilityReason.InvalidRecord)
-					}
-					if (diff.value) propagateOp(id, [RecordOpType.Patch, diff.value])
-				} else if (compareRecordVersions(ourVersion, theirVersion) === -1) {
-					// if the client's version of the record is newer than ours, we can't apply the patch
-					return fail(TLIncompatibilityReason.ServerTooOld)
-				} else {
-					// otherwise apply the patch and propagate the patch op if needed
-					const diff = doc.mergeDiff(patch, this.clock)
 					if (!diff.ok) {
 						return fail(TLIncompatibilityReason.InvalidRecord)
 					}
